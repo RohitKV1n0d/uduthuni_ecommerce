@@ -365,6 +365,14 @@
         </div>
     
     <!--- login dropdown-content end-->
+
+
+
+    {% load history_tags %}
+    {% load basket_tags %}
+    {% load currency_filters %}
+    {% load image_tags %}
+    {% load i18n %}
     
     <!--- cart dropdown-content-->
     
@@ -374,16 +382,23 @@
                         
                             <h3>Your Cart</h3>
                             <hr class="horizontal-line">
-    
+
+                            {% if request.basket.num_lines %}
+                            {% for line in request.basket.all_lines %}  
+                              
     
                             <div class="dropdown-content-of-cart">
-                                <img src="https://testsiteofrenoir.files.wordpress.com/2022/08/m1.jpg" alt="Uduthuni.com" class="thumb-image-on-dropdown-content-of-cart">
-    
-                                <a href="#">Topwear Category Sub 1.1 </a>
-                            
+                              {% with image=line.product.primary_image %}
+                                {% oscar_thumbnail image.original "100x100" upscale=False as thumb %}
+                                <a href="{{ line.product.get_absolute_url }}">
+                                    <img src="{{ thumb.url }}" alt="{{ line.product.get_title }}"  class="thumb-image-on-dropdown-content-of-cart">
+                                </a>
+                              {% endwith %}
+                                <a href="{{ line.product.get_absolute_url }}">{{ line.description }} </a>
                             </div>    
+                            {% endfor %}  
                             
-                            <div class="dropdown-content-of-cart">
+                            <!-- <div class="dropdown-content-of-cart">
                                 <img src="https://testsiteofrenoir.files.wordpress.com/2022/08/m2.jpg" alt="Uduthuni.com" class="thumb-image-on-dropdown-content-of-cart">
     
                                 <a href="#">Topwear Category Sub 1.1 </a>
@@ -394,17 +409,26 @@
     
                                 <a href="#">Topwear Category Sub 1.1 </a>
                             
-                            </div>    
+                            </div>     -->
                             <div class="bottom-text-for-dropdown-content">
                                 <a href="#"><p></p>And 5 more items </p></a>
                                 <hr class="horizontal-line">
-    
-                                <div class="price-on-dropdown-section"><p>Total: <span class="price-on-dropdown"> Rs. 1200 </span> </p></div>
+                                
+                                <div class="price-on-dropdown-section">
+                                  {% if request.basket.is_tax_known %}
+                                  <p>Total: <span class="price-on-dropdown"> {{ request.basket.total_incl_tax|currency:request.basket.currency }} </span> </p>
+                                  {% else %}
+                                  <p>Total: <span class="price-on-dropdown"> {{ request.basket.total_excl_tax|currency:request.basket.currency }} </span> </p>
+                                  {% endif %}
+                                </div>
                             
                             </div>                
                             
                             <hr class="horizontal-line">
-                            <div class="go-to-link dropdown-bottom-section-1"><a href="#">Go to your cart</a></div> 
+                            <div class="go-to-link dropdown-bottom-section-1"><a href="{% url 'basket:summary' %}">Go to your cart</a></div>
+                            {% else %}
+                            <li><p>{% trans "Your basket is empty." %}</p></li>
+                        {% endif %} 
                     
                         </div>    
         </div>

@@ -259,7 +259,11 @@
 <!--- login dropdown-content end-->
 
 
-
+{% load history_tags %}
+{% load basket_tags %}
+{% load currency_filters %}
+{% load image_tags %}
+{% load i18n %}
 <!--- Add to cart popup-->      
 <div class="pop-up-one hor-scrollable-section-one" id="add-to-cart-pop-up"> 
     <div class="pop-up-one-inner">
@@ -279,22 +283,32 @@
         </div>
   
 
-
+       
 
     <ul class="list-alt-two scroller custom-scrollbar margin-top-two"> 
 
+      {% if request.basket.num_lines %}
+      {% for line in request.basket.all_lines %}
 
         <li>
-            <img src="https://testsiteofrenoir.files.wordpress.com/2022/08/m1.jpg" alt="Uduthuni.com" class="thumb-image-alt-two">
+            <!-- <img src="https://testsiteofrenoir.files.wordpress.com/2022/08/m1.jpg" alt="Uduthuni.com" class="thumb-image-alt-two"> -->
+            {% with image=line.product.primary_image %}
+                                {% oscar_thumbnail image.original "100x100" upscale=False as thumb %}
+                                <a href="{{ line.product.get_absolute_url }}">
+                                    <img src="{{ thumb.url }}" alt="{{ line.product.get_title }}" class="thumb-image-alt-two">
+                                </a>
+                            {% endwith %}
             <div>
-                <p class="standard-text-one">Topwear Category Sub 1.1 <p>
-                <p class="smalltext-one inr">600</p>
+                <p class="standard-text-one">{{ line.description }} <p>
+                  <!-- <div class="col-sm-1 text-center"><strong>{% trans "Qty" %}</strong> {{ line.quantity }}</div> -->
+                <p class="smalltext-one inr">{{ line.unit_price_excl_tax|currency:request.basket.currency }}</p>
                 <p class="remove-text-one">Remove</p>
 
             </div>
-        </li>    
+        </li>  
+        {% endfor %}  
         
-        <li>
+        <!-- <li>
             <img src="https://testsiteofrenoir.files.wordpress.com/2022/08/m2.jpg" alt="Uduthuni.com" class="thumb-image-alt-two">
 
             <div>
@@ -320,24 +334,43 @@
         
         </li>    
       
-            
+             -->
            
      
      
     </ul>  
 
     <div>
+     
         <a href="#"><p></p>5 Items </p></a>
 
-        <div class="price-on-dropdown-section"><p>Total: <span class="price-on-dropdown"> Rs. 1200 </span> </p></div>
+        
+
+        <div class="price-on-dropdown-section">
+          
+          {% if request.basket.is_tax_known %}
+          <p> <span class="price-on-dropdown"> {% trans "Total:" %} {{ request.basket.total_incl_tax|currency:request.basket.currency }}</span> </p>
+          {% else %}
+          <p> <span class="price-on-dropdown"> {% trans "Total:" %} {{ request.basket.total_excl_tax|currency:request.basket.currency }}</span> </p>
+              
+          {% endif %}
+      
+      
+    
+        </div>
     
     </div>                
     
-
-    <button class="button-big-one primary-bg  border-none hover-effect-three">Checkout Now</button>
-    <span class="go-to-link dropdown-bottom-section-1"><a href="#">Go to your cart</a></span> 
+    <a href="{% url 'basket:summary' %}" class="btn btn-info btn-sm">{% trans "View basket" %}</a>
+    <a href="{% url 'checkout:index' %}" class="btn btn-primary btn-sm float-right"><i class="fas fa-shopping-cart"></i> {% trans "Checkout" %}</a>
+    <!-- <button class="button-big-one primary-bg  border-none hover-effect-three">Checkout Now</button>
+    <span class="go-to-link dropdown-bottom-section-1"><a href="#">Go to your cart</a></span>  -->
+    {% else %}
+    <li><p>{% trans "Your basket is empty." %}</p></li>
+{% endif %}
 
     </div>
+  
 
 </div>
 <!--- Add to cart popup End-->
@@ -713,7 +746,12 @@
     <form id="add_to_basket_form" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="add-to-basket mb-0">
         {% csrf_token %}
         <!-- {% include "oscar/partials/form_fields.html" with form=basket_form %} -->
-        <button type="submit" onclick="shoppingCart()" class="button-big-one primary-bg border-none hover-effect-three" value="{% trans 'Add to basket' %}" data-loading-text="{% trans 'Adding...' %}">{% trans "Add to basket" %}</button>
+        <button 
+          type="submit"  
+          class="button-big-one primary-bg border-none hover-effect-three" 
+          value="{% trans "Add to basket" %}"
+           data-loading-text="{% trans 'Adding...' %}" 
+           onclick="shoppingCart()"> {% trans "Add to basket" %}</button>
     </form>
 {% endif %}
 
@@ -722,7 +760,7 @@
 <form id="add_to_basket_form" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="add-to-basket mb-0">
     {% csrf_token %}
     <!-- {% include "oscar/partials/form_fields.html" with form=basket_form %} -->
-    <button type="submit" onclick="shoppingCart()" class="button-big-one primary-bg border-none hover-effect-three" value="{% trans 'Add to basket' %}" data-loading-text="{% trans 'Adding...' %}">{% trans "Buy Now" %}</button>
+    <button type="submit"  class="button-big-one primary-bg border-none hover-effect-three" value="{% trans "Add to basket" %}" data-loading-text="{% trans 'Adding...' %}" onclick="shoppingCart()">{% trans "Buy Now" %}</button>
 </form>
 {% endif %}
 
