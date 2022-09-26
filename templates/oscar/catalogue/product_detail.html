@@ -750,7 +750,7 @@
           type="submit"  
           class="button-big-one primary-bg border-none hover-effect-three" 
           value="{% trans "Add to basket" %}"
-           data-loading-text="{% trans 'Adding...' %}" 
+           data-loading-text="{% trans 'Adding...' %}"     
            onclick="shoppingCart()"> {% trans "Add to basket" %}</button>
     </form>
 {% endif %}
@@ -760,6 +760,7 @@
 <form id="add_to_basket_form" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="add-to-basket mb-0">
     {% csrf_token %}
     <!-- {% include "oscar/partials/form_fields.html" with form=basket_form %} -->
+    <p></p>
     <button type="submit"  class="button-big-one primary-bg border-none hover-effect-three" value="{% trans "Add to basket" %}" data-loading-text="{% trans 'Adding...' %}" onclick="shoppingCart()">{% trans "Buy Now" %}</button>
 </form>
 {% endif %}
