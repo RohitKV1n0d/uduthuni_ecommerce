@@ -5,4 +5,4 @@ class ProductDetailView(ProductDetailView):
 
 
 class CatalogueView(CatalogueView):
-    template_name = 'oscar/catalogue/catalogue.html'
+    template_name = 'oscar/catalogue/home.html'
