@@ -606,18 +606,39 @@
 <!--- Breadcrumb  -->
 
 <nav class="at-top one-rem-margin-bottom" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ homepage_url }}">Home</a></li>
-      <li class="breadcrumb-item"><a href="#">Section Name</a></li>
-      <li class="breadcrumb-item"><a href="#">Category Name</a></li>
-      <li class="breadcrumb-item"><a href="#">Sub Category Name</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{ product.get_title }}</li>
+    {% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ homepage_url }}">{% trans "Home" %}</a></li>
+            {% with category=product.get_categories.first %}
+            {% for c in category.get_ancestors_and_self %}
+              <li class="breadcrumb-item"><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
+            {% endfor %}
+            <li class="breadcrumb-item active" aria-current="page">{{ product.get_title }}</li>
+            {% endwith %}
+            
 
-    </ol>
+            
+        </ol>
+    </nav>
+{% endblock breadcrumbs %}
 </nav>
 <!--- Breadcrumb End-->
 
 <!-------------------------------------------------------------------------------------------------------------------->
+<pre>
+  ==================Test here==================
+
+
+
+
+
+
+
+
+==================Test here==================
+</pre>
+
 
 <!-------------------------------------------------------------------------------------------------------------------->
 <!---1st degree: top section/ Product top part image, heading buttons etc -->
