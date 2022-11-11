@@ -1,1 +1,1 @@
-web:gunicorn uduthuni.wgsi:application
+web: gunicorn uduthuni.wgsi:app
