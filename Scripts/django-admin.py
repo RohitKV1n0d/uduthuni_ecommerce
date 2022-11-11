@@ -1,4 +1,4 @@
-#!C:\Users\criza\Desktop\WaterMarks\uduthuni\uduthuni_app\Scripts\python.exe
+#!C:\Users\USER\Desktop\WaterMarks\uduthuni\uduthuni\Scripts\python.exe
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 
