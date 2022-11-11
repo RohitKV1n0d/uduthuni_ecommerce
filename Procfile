@@ -1,1 +1,1 @@
-web gunicorn uduthuni.wgsi
+web: gunicorn uduthuni.wgsi
