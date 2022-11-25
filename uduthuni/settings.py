@@ -15,10 +15,11 @@ import os
 from pathlib import Path
 from oscar.defaults import *
 
-import django_heroku
-import dj_database_url
-from decouple import config
+# import django_heroku
+# import dj_database_url
+# from decouple import config
 
+# import whitenoise
 
 
 
@@ -112,7 +113,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'oscar.apps.basket.middleware.BasketMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'whiteNoise.middleware.WhiteNoiseMiddleware',
+    # 'whiteNoise.middleware.WhiteNoiseMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -142,7 +143,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'uduthuni.wsgi.application'
+# WSGI_APPLICATION = 'uduthuni.wsgi.application'
 
 
 # Database
@@ -221,4 +222,4 @@ HAYSTACK_CONNECTIONS = {
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
